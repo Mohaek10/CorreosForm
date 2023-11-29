@@ -1,0 +1,37 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    color: #495057;
+    font-weight: bold;
+}
+h1{
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-primary:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+}

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Formulario de Envío</title>
+</head>
+
+<body>
+    <header class="bg-dark text-white text-center p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="img/portada_correos_2.jpg" alt="foto" width="150">
+                </div>
+                <div class="mt-4">
+                    <h1>CORREOS LEGANES</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+  
+    <form id="formularioEnvio" novalidate>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="nombreEmpresa">Nombre o Empresa:</label>
+                        <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa"
+                            onblur="validarStringInside(this, 3, 120)" onfocus="limpiarErrores(this)">
+                        <div class="invalid-feedback d-none">Nombre o empresa obligatorio y debe tener entre 3 y 120
+                            caracteres
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoDocumento">Tipo de Documento:</label>
+                        <select class="form-control" id="tipoDocumento" name="tipoDocumento" required>
+                            <option value="">Seleccionar</option>
+                            <option value="NIF">NIF</option>
+                            <option value="NIE">NIE</option>
+                            <option value="CIF">CIF</option>
+                        </select>
+                        <div class="invalid-feedback">Es necesario seleccionar el tipo de documento</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numeroDocumento">Número de Documento:</label>
+                        <input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento"
+                            pattern="[0-9]{8}[A-Za-z]" title="Formato válido: 12345678A" maxlength="9">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <!-- Tipo de vía -->
+                    <div class="form-group">
+                        <label for="tipoVia">Tipo de Vía:</label>
+                        <input type="text" class="form-control" id="tipoVia" name="tipoVia">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <!-- Nombre de la vía -->
+                    <div class="form-group">
+                        <label for="nombreVia">Nombre de la Vía:</label>
+                        <input type="text" class="form-control" id="nombreVia" name="nombreVia" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <!-- Código Postal y Provincia -->
+                    <div class="form-group">
+                        <label for="codigoPostal">Código Postal:</label>
+                        <input type="text" class="form-control" id="codigoPostal" name="codigoPostal"
+                            onkeyup="autocompletarProvincia()" required>
+                        <div class=" invalid-feedback">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provincia">Provincia:</label>
+                        <input type="text" class="form-control" id="provincia" name="provincia" disabled>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label for="movil">Móvil:</label>
+                        <input type="tel" class="form-control" id="movil" name="movil" pattern="[679][0-9]{8}" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono:</label>
+                        <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[679][0-9]{8}"
+                            required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <!-- Peso y Tamaño -->
+                    <div class="form-group">
+                        <label for="peso">Peso (entero + dos decimales):</label>
+                        <input type="number" step="0.01" class="form-control" id="peso" name="peso" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <!-- Fecha límite y campos asociados -->
+                    <div class="form-group">
+                        <label for="fechaLimite">Fecha Límite (para envío de vuelta):</label>
+                        <input type="date" class="form-control" id="fechaLimite" name="fechaLimite">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label class="form-check-label" for="checkEnvioVuelta">Preparar envío de vuelta:</label>
+                        <input type="checkbox" class="form-check-input m-2" id="checkEnvioVuelta" name="checkEnvioVuelta">
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label for="seguroTodoRiesgo">Seguro a Todo Riesgo:</label>
+                        <input type="checkbox" class="form-check-input m-2" id="seguroTodoRiesgo" name="seguroTodoRiesgo">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="importeAsegurado">Importe Asegurado:</label>
+                        <input type="number" class="form-control" id="importeAsegurado" name="importeAsegurado"
+                            step="0.01">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Enviar</button>
+            
+        </div>
+        
+    </form>
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        //Validacion de nombre o empresa
+        function validarStringInside(elemento, min, max) {
+            var capaerror = elemento.nextElementSibling; // Obtén el elemento hermano siguiente (la capa de error)
+
+            if (!validarString(elemento.value, min, max)) {
+
+                elemento.classList.add('is-invalid');
+                capaerror.classList.remove('d-none');
+            } else {
+                elemento.classList.remove('is-invalid');
+                capaerror.classList.add('d-none');
+            }
+        }
+
+        function validarString(valor, min, max) {
+            return valor.length >= min && valor.length <= max;
+        }
+        function limpiarErrores(elemento) {
+            elemento.classList.remove('is-invalid');
+            elemento.nextElementSibling.classList.add('d-none');
+        }
+        //Validacion de select
+        function limpiarErroresSelect(elemento) {
+            elemento.classList.remove('is-invalid');
+            elemento.nextElementSibling.classList.add('d-none');
+        }
+
+        function validarSelect(elemento) {
+            var capaerror = elemento.nextElementSibling; // Obtén el elemento hermano siguiente (la capa de error)
+
+            if (elemento.value === "") {
+                elemento.classList.add('is-invalid');
+                capaerror.classList.remove('d-none');
+            } else {
+                elemento.classList.remove('is-invalid');
+                capaerror.classList.add('d-none');
+            }
+        }
+
+        function darProvincia(cpostal) {
+            let cp_provincias = {
+                1: "Alava", 2: "Albacete", 3: "Alicante", 4: "Almeria", 5: "Avila",
+                6: "Badajoz", 7: "Baleares", 8: "Barcelona", 9: "Burgos", 10: "Caceres",
+                11: "Cadiz", 12: "Castellon", 13: "Ciudad Real", 14: "Cordoba", 15: "Coruña",
+                16: "Cuenca", 17: "Gerona", 18: "Granada", 19: "Guadalajara", 20: "Guipuzcoa",
+                21: "Huelva", 22: "Huesca", 23: "Jaen", 24: "Leon", 25: "Lerida",
+                26: "La Rioja", 27: "Lugo", 28: "Madrid", 29: "Malaga", 30: "Murcia",
+                31: "Naletra", 32: "Orense", 33: "Asturias", 34: "Palencia", 35: "Las Palmas",
+                36: "Pontevedra", 37: "Salamanca", 38: "Santa Cruz de Tenerife", 39: "Cantabria", 40: "Segovia",
+                41: "Sevilla", 42: "Soria", 43: "Tarragona", 44: "Teruel", 45: "Toledo",
+                46: "Valencia", 47: "Valladolid", 48: "Vizcaya", 49: "Zamora", 50: "Zaragoza",
+                51: "Ceuta", 52: "Melilla"
+            };
+
+            cpostal = cpostal.replace(/\s/g, '');
+
+            if (cpostal.length === 5 && parseInt(cpostal) <= 52999 && parseInt(cpostal) >= 1000) {
+                return cp_provincias[parseInt(cpostal.substring(0, 2))];
+            } else {
+                return "---";
+            }
+        }
+
+        let inputCP = document.getElementById('codigoPostal');
+        inputCP.onkeyup = function () {
+            document.getElementById('provincia').value = darProvincia(inputCP.value);
+        };
+
+        function autocompletarProvincia() {
+            let inputCP = document.getElementById('codigo_postal');
+            let provinciaInput = document.getElementById('provincia');
+            provinciaInput.value = darProvincia(inputCP.value);
+        }
+        // Validación en tiempo real
+        document.addEventListener('input', function (e) {
+            if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'select') {
+                validarCampo(e.target);
+            }
+        });
+
+        // Validación al enviar el formulario
+        document.getElementById('formularioEnvio').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var campos = this.elements;
+            var valido = true;
+
+            for (var i = 0; i < campos.length; i++) {
+                if (campos[i].tagName.toLowerCase() === 'input' || campos[i].tagName.toLowerCase() === 'select') {
+                    if (!validarCampo(campos[i])) {
+                        valido = false;
+                    }
+                }
+            }
+
+            // Validación específica para la letra del DNI
+            if (!validarLetraDNI(campos['numeroDocumento'])) {
+                valido = false;
+            }
+
+            if (valido) {
+                // Aquí puedes enviar el formulario o realizar otras acciones
+                alert('Formulario válido. Enviando datos...');
+            } else {
+                alert('Formulario inválido. Por favor, verifica los campos marcados.');
+            }
+        });
+
+        // Función para validar un campo específico
+        function validarCampo(campo) {
+            var valido = campo.checkValidity();
+
+            if (valido) {
+                campo.classList.remove('is-invalid');
+                campo.nextElementSibling.textContent = '';
+            } else {
+                campo.classList.add('is-invalid');
+                campo.nextElementSibling.textContent = obtenerMensajeError(campo);
+            }
+
+            return valido;
+        }
+
+        // Función para obtener el mensaje de error de un campo específico
+        function obtenerMensajeError(campo) {
+            if (campo.validity.valueMissing) {
+                return 'Campo obligatorio';
+            } else if (campo.validity.patternMismatch) {
+                return 'Formato incorrecto';
+            } else if (campo.validity.typeMismatch) {
+                return 'Formato de email incorrecto';
+            } else {
+                return 'Valor inválido';
+            }
+        }
+
+        // Función para validar la letra del DNI
+        function validarLetraDNI(campo) {
+            var dniNumero = campo.value.substring(0, 8);
+            var dniLetra = campo.value.charAt(8).toUpperCase();
+            var letrasValidas = 'TRWAGMYFPDXBNJZSQVHLCKEO';
+
+            if (letrasValidas.charAt(dniNumero % 23) === dniLetra) {
+                campo.classList.remove('is-invalid');
+                campo.nextElementSibling.textContent = '';
+                return true;
+            } else {
+                campo.classList.add('is-invalid');
+                campo.nextElementSibling.textContent = 'Letra del DNI incorrecta';
+                return false;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
