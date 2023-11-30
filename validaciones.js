@@ -1,19 +1,19 @@
-function validarString(elemento, minCaracteres, maxCaracteres, errorElement) {
-    let correcto = false;
-    let longitud = elemento.value.trim();
-    let errorDiv = errorElement.querySelector('.invalid-feedback'); // Cambio aquí para el elemeno incorrecto
+function validarStringInside(elemento, minCaracteres, maxCaracteres, errorElement) {
+    let cadena = elemento.value.trim();
+    let errorDiv = errorElement.querySelector('.invalid-feedback');
 
-    if ((longitud.length >= minCaracteres && longitud.length <= maxCaracteres) && isNaN(elemento.value) === true) {
+    if (validString(cadena, minCaracteres, maxCaracteres)) {
         elemento.classList.remove('is-invalid');
-        errorDiv.style.display = 'none'; // Oculta el mensaje de error
-        correcto = true;
-
+        errorDiv.style.display = 'none';
     } else {
-        console.info("El nombre " + longitud + " es invalido");
+        console.info("La cadena '" + cadena + "' es inválida");
         elemento.classList.add('is-invalid');
-        errorDiv.style.display = 'block'; // Muestra el mensaje de error
+        errorDiv.style.display = 'block';
     }
-    return correcto;
+}
+
+function validString(cadena, min, max) { //devuelve true si la cadena es válida
+    return isNaN(cadena) && cadena.length >= min && (max === null || cadena.length <= max);
 }
 
 
@@ -24,27 +24,33 @@ function validarInput(input, otroCampoId) {
 }
 
 //Select Documento
-function validarSelect(elemento, errorElement) {
-    var correcto = false;
+function validarSelectInside(elemento, errorElement) {
     var errorDiv = errorElement.querySelector('.invalid-feedback'); // Cambio aquí para el elemeno incorrecto
 
     if (elemento.value !== "") {
         elemento.classList.remove('is-invalid');
         errorDiv.style.display = 'none'; // Oculta el mensaje de error
-        correcto = true;
 
     } else {
         elemento.classList.add('is-invalid');
         errorDiv.style.display = 'block'; // Muestra el mensaje de error
     }
+
+}
+
+function validSelect(elemento) {
+    var correcto = false;
+    if (elemento.value !== "") {
+        correcto = true;
+    }
     return correcto;
 
 }
 
+
 // Validar documentacion dni o nie, depende del select
 function validarDocumento(elemento, documento, errorElement) {
     var errorDiv = errorElement.querySelector('.invalid-feedback');
-    var correctDiv = errorElement.querySelector('.valid-feedback');
     var correcto = false;
     if (documento.value.toLowerCase() === "nif") {
         console.log("Se ha escodigo NIF")
@@ -85,11 +91,9 @@ function validarDocumento(elemento, documento, errorElement) {
     if (correcto === true) {
         elemento.classList.remove('is-invalid');
         errorDiv.style.display = 'none';
-        correctDiv.style.display = 'block';
     } else {
         elemento.classList.add('is-invalid');
         errorDiv.style.display = 'block';
-        correctDiv.style.display = 'none';
     }
 
     return correcto;
@@ -165,23 +169,42 @@ function isCIF(letra1, numero, letra2) {
 //     }
 // }
 
+//Validar numero entre min y max
+function validNumber(elemento, min, max) {
 
-//Numero y Piso
-
-function validarNumeroDeVia(elemento, errorElement) {
     var correcto = false;
-    var errorDiv = errorElement.querySelector('.invalid-feedback'); // Cambio aquí para el elemeno incorrecto
-    let num = parseInt(elemento.value);
-    if ((elemento.value !== "") && num > 0 && num < 100) {
+    elemento = parseFloat(elemento.value);
+    if (elemento >= min && elemento<= max) {
+        correcto = true;
+    }
+    return correcto;
+
+}
+function validarNumeroInside(elemento, min, max, errorElement) {
+    var errorDiv = errorElement.querySelector('.invalid-feedback');
+    if (validNumber(elemento, min, max)) {
         elemento.classList.remove('is-invalid');
         errorDiv.style.display = 'none'; // Oculta el mensaje de error
-        correcto = true;
 
     } else {
         elemento.classList.add('is-invalid');
         errorDiv.style.display = 'block'; // Muestra el mensaje de error
     }
-    return correcto;
+}
+
+//Numero y Piso
+
+function validarNumeroDeVia(elemento, errorElement) {
+    var errorDiv = errorElement.querySelector('.invalid-feedback');
+    let num = parseInt(elemento.value);
+    if (validNumber(elemento, 1, 100)) {
+        elemento.classList.remove('is-invalid');
+        errorDiv.style.display = 'none'; // Oculta el mensaje de error
+
+    } else {
+        elemento.classList.add('is-invalid');
+        errorDiv.style.display = 'block'; // Muestra el mensaje de error
+    }
 
 }
 
@@ -200,11 +223,10 @@ let cpProvincias = {
     51: "Ceuta", 52: "Melilla"
 };
 
-function validarCodigoPostal(elemento, errorElement) {
-    var correcto = false;
+function validarCodigoPostalInside(elemento, errorElement) {
     var errorDiv = errorElement.querySelector('.invalid-feedback'); // Cambio aquí para el elemeno incorrecto
     let cp = parseInt(elemento.value);
-    if ((elemento.value !== "") && cp > 1000 && cp < 52999) {
+    if (validCodPostal(elemento)) {
         elemento.classList.remove('is-invalid');
         errorDiv.style.display = 'none'; // Oculta el mensaje de error
         correcto = true;
@@ -213,8 +235,18 @@ function validarCodigoPostal(elemento, errorElement) {
         elemento.classList.add('is-invalid');
         errorDiv.style.display = 'block'; // Muestra el mensaje de error
     }
-    return correcto;
 }
+
+function validCodPostal(elemento) {
+    var correcto = false;
+    let cp = parseInt(elemento.value);
+    if ((elemento.value !== "") && cp > 1000 && cp < 52999) {
+        correcto = true;
+    }
+    return correcto;
+
+}
+
 function obtenerProvincia(codigoPostal) {
     codigoPostal = codigoPostal.replace(/\s/g, '');
 
@@ -230,45 +262,184 @@ function actualizarProvinciaEnInput() {
     const inputProvincia = document.getElementById('provincia');
 
     inputProvincia.value = obtenerProvincia(inputCodigoPostal.value);
-}
+    document.getElementById('codigoPostal').addEventListener('keyup', actualizarProvinciaEnInput);
 
-document.getElementById('codigoPostal').addEventListener('keyup', actualizarProvinciaEnInput);
+}
 
 
 // Validar Telefonos
 
-function validarNumeroTelefono(elemento,errorElement){
+function validarNumeroTelefono(elemento, errorElement) {
+
     var errorDiv = errorElement.querySelector('.invalid-feedback');
-    var correctDiv = errorElement.querySelector('.valid-feedback');
-    if(!isNaN(elemento.value)&& elemento.value.length===9){
-        var indice=elemento.value.substring(0,1);
-        if(indice===6|| indice===9 ||indice===7){
-            elemento.classList.remove('is-invalid');
-            errorDiv.style.display = 'none';
-            correctDiv.style.display = 'block';
-        }else{
-            elemento.classList.add('is-invalid');
-            errorDiv.style.display = 'block';
-            correctDiv.style.display = 'none';
-        }
-    }else{
-        elemento.classList.add('is-invalid');
+
+    if (validarTelefono(elemento.value)) {
+        errorDiv.style.display = 'none';
+    } else {
         errorDiv.style.display = 'block';
-        correctDiv.style.display = 'none';
+    }
+
+}
+
+function validarTelefono(cadena) {
+    console.log(cadena)
+    if ((cadena.length === 0) || (validarNumero(cadena, 9, 9) && (cadena.charAt(0) === '9' || cadena.charAt(0) === '7' || cadena.charAt(0) === '6'))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validarNumero(cadena, min, max) {
+    if (!isNaN(cadena) && cadena.length >= min && cadena.length <= max) {
+        return true;
+    } else {
+        return false;
     }
 }
 
 // Validar Email
-function validarEmail(elemento,errorElement){
+function validarEmailInside(elemento, errorElement) {
     var errorDiv = errorElement.querySelector('.invalid-feedback');
-    var correctDiv = errorElement.querySelector('.valid-feedback');
-    if(elemento.value.includes("@")&& elemento.value.includes(".")){
+    if (validEmail(elemento)) {
         elemento.classList.remove('is-invalid');
         errorDiv.style.display = 'none';
-        correctDiv.style.display = 'block';
-    }else{
+        correcto = true;
+    } else {
         elemento.classList.add('is-invalid');
         errorDiv.style.display = 'block';
-        correctDiv.style.display = 'none';
     }
+}
+function validEmail(elemento) {
+    let correcto = false;
+    if (elemento.value.includes("@") && elemento.value.includes(".")) {
+        correcto = true;
+    }
+    return correcto;
+}
+
+//Calcular peso volumetrico
+function pesoVolumetrico(alto, largo, ancho, envioPeso) {
+    var correcto=false;
+    var altoNum = parseFloat(alto.value);
+    var largoNum = parseFloat(largo.value);
+    var anchoNum = parseFloat(ancho.value);
+
+    if (!isNaN(altoNum) && !isNaN(largoNum) && !isNaN(anchoNum)) {
+        correcto=true;
+        var altura = altoNum.toFixed(2);
+        var longitur = largoNum.toFixed(2);
+        var anchura = anchoNum.toFixed(2);
+        envioPeso.value = ((altura*longitur*anchura)/5000).toFixed(2);
+    }
+    console.log("El peso volumetrico es : "+correcto)
+    return correcto;
+}
+
+function unlock(elemento,desbloquear){
+    if(elemento.checked){
+        console.log("Desbloqueado")
+        desbloquear.disabled=false;
+    }else{
+        console.log("Bloqueado")
+        desbloquear.disabled=true;
+    }
+}
+function validFecha(elemento, fechaLim) {
+    var correcto = false;
+
+    // Obtener el valor del elemento
+    var fechaTexto = elemento.value;
+
+    // Separar el día, mes y año
+    var partesFecha = fechaTexto.split('/');
+    var dia = parseInt(partesFecha[0], 10);
+    var mes = parseInt(partesFecha[1], 10) - 1; // Restar 1 al mes ya que los meses en JavaScript son 0-indexados
+    var anio = parseInt(partesFecha[2], 10);
+
+    // Crear una nueva fecha con los componentes obtenidos
+    var fechaValidada = new Date(anio, mes, dia);
+
+    if (validarFechaText(elemento)) {
+        console.log("Fecha correcta");
+
+        // Asegurarse de que fechaLim sea una fecha válida
+        if (isNaN(fechaLim.getTime())) {
+            console.error("La fecha límite no es válida");
+            return false;
+        }
+
+        fechaValidada.setHours(0, 0, 0, 0);
+        fechaLim.setHours(0, 0, 0, 0);
+
+        if (fechaValidada > fechaLim) {
+            correcto = true;
+        }
+    }
+
+    return correcto;
+}
+
+
+function validarFechaText(elemento) {
+    var fechaInput = elemento.value;
+    var patronFecha = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    if (patronFecha.test(fechaInput)) {
+        var dia = parseInt(fechaInput.substring(0, 2), 10);
+        var mes = parseInt(fechaInput.substring(3, 5), 10);
+        var ano = parseInt(fechaInput.substring(6, 10), 10);
+
+        if (dia >= 1 && dia < 32 && mes >= 1 && mes < 13 && ano >= 1000) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+
+
+function validarFechaInside(elemento, errorElement) {
+    var errorDiv = errorElement.querySelector('.invalid-feedback');
+    let fechahoy = new Date();
+
+    // Utilizar la función validarFechaText para verificar el formato
+    if (validarFechaText(elemento)) {
+
+        if (validFecha(elemento, fechahoy)) {
+            elemento.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+        } else {
+            elemento.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+        }
+    } else {
+        elemento.classList.add('is-invalid');
+        errorDiv.style.display = 'block';
+    }
+}
+function validarIbanInside(elemento, errorElement) {
+    var errorDiv = errorElement.querySelector('.invalid-feedback');
+    if (validarIban(elemento)) {
+        elemento.classList.remove('is-invalid');
+        errorDiv.style.display = 'none';
+    } else {
+        elemento.classList.add('is-invalid');
+        errorDiv.style.display = 'block';
+    }
+}
+function validarIban(elemento) {
+    var iban = elemento.value;
+    var correcto = false;
+    if (iban.length === 24) {
+        var letras = iban.substring(0, 2);
+        var numeros = iban.substring(2, 24);
+        if (isNaN(letras) && !isNaN(numeros)) {
+            correcto = true;
+        }
+    }
+    return correcto;
 }
