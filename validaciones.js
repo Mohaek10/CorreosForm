@@ -443,3 +443,21 @@ function validarIban(elemento) {
     }
     return correcto;
 }
+
+function comprobarMaxTextArea(elemento, maxCaracteres, errorElement) {
+    var errorDiv = errorElement.querySelector('.invalid-feedback');
+    if (validarTamanoTextArea(elemento, maxCaracteres)) {
+        elemento.classList.remove('is-invalid');
+        errorDiv.style.display = 'none';
+    } else {
+        elemento.classList.add('is-invalid');
+        errorDiv.style.display = 'block';
+    }
+}
+function validarTamanoTextArea(elemento,maxCarc){
+    var correcto=false;
+    if(elemento.value.length<=maxCarc){
+        correcto=true;
+    }
+    return correcto;
+}

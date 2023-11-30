@@ -71,6 +71,18 @@
                 res = false;
                 mensaje += "El importe del seguro debe de ser mayor que 0 y menor que 10000\n";
             }
+            if (!validNumber(importeReembolso, 0, 10000) && importeReembolso.disabled === false) {
+                res = false;
+                mensaje += "El importe del reembolso debe de ser mayor que 0 y menor que 10000\n";
+            }
+            if (!validFecha(fechaRecogida, new Date()) && fechaRecogida.disabled === false) {
+                res = false;
+                mensaje += "La fecha de recogida debe de ser mayor que la fecha de hoy\n";
+            }
+            if (!validarTamanoTextArea(observaciones, 150)) {
+                res = false;
+                mensaje += "El texto no puede superar los 150 caracteres\n";
+            }
 
 
             if (res === false)
@@ -80,6 +92,39 @@
             return res;
 
         }
+
+        function recuperarDatos(){
+            let datos = "";
+            datos += "Nombre: " + nombre.value + "\n";
+            datos += "Empresa: " + empresa.value + "\n";
+            datos += "Tipo de documento: " + tipoDocumento.value + "\n";
+            datos += "Número de documento: " + numeroDocumento.value + "\n";
+            datos += "Tipo de vía: " + tipoVia.value + "\n";
+            datos += "Nombre de la vía: " + nombreVia.value + "\n";
+            datos += "Número de la vía: " + numeroVia.value + "\n";
+            datos += "Piso: " + piso.value + "\n";
+            datos += "Puerta: " + puerta.value + "\n";
+            datos += "Escalera: " + escalera.value + "\n";
+            datos += "Código postal: " + codigoPostal.value + "\n";
+            datos += "Provincia: " + provincia.value + "\n";
+            datos += "Móvil: " + movil.value + "\n";
+            datos += "Teléfono: " + telefono.value + "\n";
+            datos += "Email: " + email.value + "\n";
+            datos += "Peso: " + peso.value + "\n";
+            datos += "Peso volumétrico: " + pVolumetrico.value + "\n";
+            datos += "Alto: " + alto.value + "\n";
+            datos += "Ancho: " + ancho.value + "\n";
+            datos += "Largo: " + largo.value + "\n";
+            datos += "Fecha de vuelta: " + fecha.value + "\n";
+            datos += "Importe del seguro: " + importeSeguro.value + "\n";
+            datos += "Importe del reembolso: " + importeReembolso.value + "\n";
+            datos += "IBAN: " + numeroIban.value + "\n";
+            datos += "Fecha de recogida: " + fechaRecogida.value + "\n";
+            datos += "Observaciones: " + observaciones.value + "\n";
+
+            return datos;
+        }
+
     </script>
 </head>
 
@@ -97,7 +142,7 @@
     </div>
 </header>
 
-<form id="formularioEnvio" class="needs-validation" onsubmit="return validarFormulario()">
+<form id="formularioEnvio" action="javascript:alert(recuperarDatos())" class="needs-validation" onsubmit="return validarFormulario()">
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-6">
@@ -374,7 +419,9 @@
         <div class="form-group">
             <label for="observaciones">Observaciones</label>
             <textarea name="observaciones" id="observaciones" cols="30" rows="10" class="form-control"
-                      placeholder="Observaciones"></textarea>
+                      placeholder="Observaciones"
+                      onblur="comprobarMaxTextArea(this,150,this.parentNode)"></textarea>
+            <div class="invalid-feedback">El texto no puede superar los 150 caracteres</div>
         </div>
 
 
